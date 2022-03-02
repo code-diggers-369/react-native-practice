@@ -6,20 +6,32 @@ import {
   TouchableOpacity,
   Dimensions,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function Home() {
   const [inputBoxValue, setInputBoxValue] = useState('');
 
-  const [storageDataList, setStorageDataList] = useState('');
+  const [storageDataList, setStorageDataList] = useState([]);
+
+  useEffect(() => {
+    async function tempFunction() {
+      await getItemList();
+    }
+
+    tempFunction();
+
+    return () => {};
+  }, []);
 
   const addItemToList = async () => {
     try {
-      await AsyncStorage.setItem('itemList', inputBoxValue);
-      setInputBoxValue('');
+      storageDataList.push(inputBoxValue);
 
-      await getItemList();
+      const output = JSON.stringify(storageDataList);
+
+      await AsyncStorage.setItem('itemList', output);
+      setInputBoxValue('');
 
       alert('Data Is Added');
     } catch (err) {
@@ -30,7 +42,10 @@ export default function Home() {
   const getItemList = async () => {
     try {
       const data = await AsyncStorage.getItem('itemList');
-      setStorageDataList(data);
+
+      const output = JSON.parse(data);
+
+      setStorageDataList(output);
     } catch (err) {
       console.log(err);
     }
@@ -51,7 +66,19 @@ export default function Home() {
         <Text style={{color: '#fff'}}>Add</Text>
       </TouchableOpacity>
 
-      <Text>Your Data is {storageDataList}</Text>
+      <View style={styles.list}>
+        <Text style={{fontSize: 20, fontWeight: 'bold', marginBottom: 30}}>
+          Array List
+        </Text>
+
+        {storageDataList.map((item, index) => {
+          return (
+            <Text style={{marginVertical: 10}} key={index}>
+              {item}
+            </Text>
+          );
+        })}
+      </View>
     </View>
   );
 }
@@ -74,5 +101,10 @@ const styles = StyleSheet.create({
     marginHorizontal: 10,
     alignItems: 'center',
     padding: 10,
+  },
+  list: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
