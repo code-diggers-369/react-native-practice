@@ -1,67 +1,60 @@
-import React, {useEffect, useState} from 'react';
-import {View, Text, Dimensions} from 'react-native';
+import React, {useState} from 'react';
+import {
+  View,
+  Text,
+  TextInput,
+  StyleSheet,
+  TouchableOpacity,
+} from 'react-native';
+import Ionicon from 'react-native-vector-icons/Ionicons';
+import FontAwesome from 'react-native-vector-icons/FontAwesome5';
 
 export default function Home() {
-  const [isRotate, setIsRotate] = useState(false);
-
-  useEffect(() => {
-    Dimensions.addEventListener('change', () => {
-      const orientation = isPotrait();
-
-      setIsRotate(orientation);
-    });
-
-    return () => {};
-  }, []);
-
-  const isPotrait = () => {
-    const {height, width} = Dimensions.get('screen');
-
-    return height > width ? false : true;
-  };
-
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   return (
-    <View
-      style={{
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: 'black',
-        flex: 1,
-        flexDirection: isRotate ? 'row' : 'column',
-      }}>
-      <View
-        style={{
-          flex: 1,
-          width: '100%',
-          height: '100%',
-          backgroundColor: 'red',
-          justifyContent: 'center',
-          alignItems: 'center',
-        }}>
-        <Text>Hello</Text>
+    <View style={styles.container}>
+      <View style={styles.inputBoxContainer}>
+        <Ionicon name="mail" size={25} />
+        <TextInput style={styles.inputBox} placeholder="Enter Your Email" />
       </View>
-      <View
-        style={{
-          flex: 1,
-          justifyContent: 'center',
-          alignItems: 'center',
-          width: '100%',
-          height: '100%',
-          backgroundColor: 'yellow',
-        }}>
-        <Text>World</Text>
-      </View>
-      <View
-        style={{
-          flex: 1,
-          width: '100%',
-          height: '100%',
-          justifyContent: 'center',
-          alignItems: 'center',
-          backgroundColor: 'green',
-        }}>
-        <Text>World</Text>
+      {/*  */}
+      <View style={styles.inputBoxContainer}>
+        <FontAwesome name="lock" size={25} />
+        <TextInput
+          style={styles.inputBox}
+          placeholder="Enter Your Password"
+          secureTextEntry={isPasswordVisible ? false : true}
+        />
+        <TouchableOpacity
+          onPress={() => setIsPasswordVisible(!isPasswordVisible)}>
+          <FontAwesome
+            name={isPasswordVisible ? 'eye-slash' : 'eye'}
+            size={25}
+          />
+        </TouchableOpacity>
+        {/* <FontAwesome name="eye-slash" size={25} /> */}
       </View>
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: 'center',
+  },
+  inputBoxContainer: {
+    // backgroundColor: 'red',
+    alignItems: 'center',
+    flexDirection: 'row',
+    borderWidth: 1,
+    width: '90%',
+    marginTop: 10,
+    borderRadius: 20,
+    paddingHorizontal: 10,
+  },
+  inputBox: {
+    marginHorizontal: 10,
+    flex: 1,
+  },
+});
