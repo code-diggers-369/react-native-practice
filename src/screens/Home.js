@@ -1,110 +1,67 @@
-import {
-  View,
-  Text,
-  TextInput,
-  StyleSheet,
-  TouchableOpacity,
-  Dimensions,
-} from 'react-native';
-import React, {useState, useEffect} from 'react';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import React, {useEffect, useState} from 'react';
+import {View, Text, Dimensions} from 'react-native';
 
 export default function Home() {
-  const [inputBoxValue, setInputBoxValue] = useState('');
-
-  const [storageDataList, setStorageDataList] = useState([]);
+  const [isRotate, setIsRotate] = useState(false);
 
   useEffect(() => {
-    async function tempFunction() {
-      await getItemList();
-    }
+    Dimensions.addEventListener('change', () => {
+      const orientation = isPotrait();
 
-    tempFunction();
+      setIsRotate(orientation);
+    });
 
     return () => {};
   }, []);
 
-  const addItemToList = async () => {
-    try {
-      storageDataList.push(inputBoxValue);
+  const isPotrait = () => {
+    const {height, width} = Dimensions.get('screen');
 
-      const output = JSON.stringify(storageDataList);
-
-      await AsyncStorage.setItem('itemList', output);
-      setInputBoxValue('');
-
-      alert('Data Is Added');
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
-  const getItemList = async () => {
-    try {
-      const data = await AsyncStorage.getItem('itemList');
-
-      const output = JSON.parse(data);
-
-      setStorageDataList(output);
-    } catch (err) {
-      console.log(err);
-    }
+    return height > width ? false : true;
   };
 
   return (
-    <View style={styles.container}>
-      <TextInput
-        style={styles.inputBox}
-        value={inputBoxValue}
-        placeholder="Enter Data"
-        onChangeText={value => setInputBoxValue(value)}
-      />
-
-      <TouchableOpacity
-        style={styles.addButton}
-        onPress={() => addItemToList()}>
-        <Text style={{color: '#fff'}}>Add</Text>
-      </TouchableOpacity>
-
-      <View style={styles.list}>
-        <Text style={{fontSize: 20, fontWeight: 'bold', marginBottom: 30}}>
-          Array List
-        </Text>
-
-        {storageDataList.map((item, index) => {
-          return (
-            <Text style={{marginVertical: 10}} key={index}>
-              {item}
-            </Text>
-          );
-        })}
+    <View
+      style={{
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'black',
+        flex: 1,
+        flexDirection: isRotate ? 'row' : 'column',
+      }}>
+      <View
+        style={{
+          flex: 1,
+          width: '100%',
+          height: '100%',
+          backgroundColor: 'red',
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}>
+        <Text>Hello</Text>
+      </View>
+      <View
+        style={{
+          flex: 1,
+          justifyContent: 'center',
+          alignItems: 'center',
+          width: '100%',
+          height: '100%',
+          backgroundColor: 'yellow',
+        }}>
+        <Text>World</Text>
+      </View>
+      <View
+        style={{
+          flex: 1,
+          width: '100%',
+          height: '100%',
+          justifyContent: 'center',
+          alignItems: 'center',
+          backgroundColor: 'green',
+        }}>
+        <Text>World</Text>
       </View>
     </View>
   );
 }
-
-const {width} = Dimensions.get('screen');
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  inputBox: {
-    borderWidth: 2,
-    borderColor: 'black',
-    marginVertical: 10,
-    marginHorizontal: 8,
-  },
-  addButton: {
-    width: width - 20,
-    backgroundColor: 'blue',
-    marginHorizontal: 10,
-    alignItems: 'center',
-    padding: 10,
-  },
-  list: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-});
