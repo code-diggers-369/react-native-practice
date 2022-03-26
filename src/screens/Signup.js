@@ -11,28 +11,27 @@ import {
 import {useNavigation} from '@react-navigation/native';
 import FontAwsome from 'react-native-vector-icons/FontAwesome5';
 import Axios from 'axios';
-
 //
 import BackgroundImg from '../../assets/img/bg-transferent.png';
 
-export default function Login() {
+export default function Signup() {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   //
   const navigation = useNavigation();
 
-  const loginUser = async () => {
+  const signupUser = async () => {
     try {
-      const {data} = await Axios.post('http://192.168.0.102/api/login.php', {
+      const {data} = await Axios.post('http://192.168.0.102/api/signup.php', {
         email: email,
         password: password,
       });
 
       if (data.status == 'success') {
-        alert('User Login Successfully');
+        alert('User Created Successfully');
       } else {
-        alert('User Not Found');
+        alert('User Not Created');
       }
 
       console.log(data);
@@ -40,7 +39,6 @@ export default function Login() {
       console.log(err);
     }
   };
-
   return (
     <View style={styles.container}>
       <StatusBar hidden={true} />
@@ -95,10 +93,10 @@ export default function Login() {
             <TouchableOpacity
               style={styles.loginButton}
               onPress={() => {
-                loginUser();
+                signupUser();
               }}>
               <Text style={{color: '#fff', fontWeight: 'bold', fontSize: 17}}>
-                Login
+                Signup
               </Text>
             </TouchableOpacity>
             {/*  */}
@@ -129,10 +127,10 @@ export default function Login() {
             {/*  */}
             <View>
               <View style={{flexDirection: 'row', marginVertical: 10}}>
-                <Text style={{color: '#fff'}}>Don't Have An Account</Text>
+                <Text style={{color: '#fff'}}>Already Have An Account</Text>
                 <TouchableOpacity
                   onPress={() => {
-                    navigation.navigate('Signup');
+                    navigation.navigate('Login');
                   }}>
                   <Text
                     style={{
@@ -140,7 +138,7 @@ export default function Login() {
                       color: '#02C38E',
                       fontWeight: 'bold',
                     }}>
-                    Signup
+                    Login
                   </Text>
                 </TouchableOpacity>
               </View>
