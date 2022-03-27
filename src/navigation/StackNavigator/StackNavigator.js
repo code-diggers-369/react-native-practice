@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 
@@ -11,33 +11,19 @@ import Signup from '../../screens/Signup';
 const Stack = createNativeStackNavigator();
 
 export default function StackNavigator() {
-  const [showSplashScreen, setShowSplashScreen] = useState(true);
-
-  useEffect(() => {
-    setTimeout(() => {
-      setShowSplashScreen(false);
-    }, 4000);
-  }, []);
-
   return (
     <NavigationContainer>
       <Stack.Navigator>
         {/*  */}
-        {showSplashScreen ? (
-          <Stack.Screen
-            name="Splash"
-            component={SplashScreen}
-            options={{headerShown: false}}
-          />
-        ) : null}
+
+        <Stack.Screen
+          name="Splash"
+          component={SplashScreen}
+          options={{headerShown: false}}
+        />
 
         {/*  */}
-        {/* <Stack.Screen
-          name="Home"
-          component={Home}
-          options={{headerShown: false}}
-        /> */}
-        {/*  */}
+
         <Stack.Screen
           name="Login"
           component={Login}
@@ -47,6 +33,12 @@ export default function StackNavigator() {
         <Stack.Screen
           name="Signup"
           component={Signup}
+          options={{headerShown: false}}
+        />
+        {/*  */}
+        <Stack.Screen
+          name="Home"
+          component={Home}
           options={{headerShown: false}}
         />
       </Stack.Navigator>

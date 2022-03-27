@@ -1,60 +1,38 @@
-import React, {useState} from 'react';
-import {
-  View,
-  Text,
-  TextInput,
-  StyleSheet,
-  TouchableOpacity,
-} from 'react-native';
-import Ionicon from 'react-native-vector-icons/Ionicons';
-import FontAwesome from 'react-native-vector-icons/FontAwesome5';
+import {View, Text, TouchableOpacity} from 'react-native';
+import React from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {useNavigation, StackActions} from '@react-navigation/native';
 
 export default function Home() {
-  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+  //
+  const navigation = useNavigation();
+  //
+  const handleLogout = async () => {
+    try {
+      console.log('logout');
+      await AsyncStorage.clear();
+
+      navigation.dispatch(StackActions.replace('Login'));
+    } catch (err) {
+      console.log(err);
+    }
+  };
   return (
-    <View style={styles.container}>
-      <View style={styles.inputBoxContainer}>
-        <Ionicon name="mail" size={25} />
-        <TextInput style={styles.inputBox} placeholder="Enter Your Email" />
-      </View>
-      {/*  */}
-      <View style={styles.inputBoxContainer}>
-        <FontAwesome name="lock" size={25} />
-        <TextInput
-          style={styles.inputBox}
-          placeholder="Enter Your Password"
-          secureTextEntry={isPasswordVisible ? false : true}
-        />
-        <TouchableOpacity
-          onPress={() => setIsPasswordVisible(!isPasswordVisible)}>
-          <FontAwesome
-            name={isPasswordVisible ? 'eye-slash' : 'eye'}
-            size={25}
-          />
-        </TouchableOpacity>
-        {/* <FontAwesome name="eye-slash" size={25} /> */}
-      </View>
+    <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+      <Text>Home</Text>
+
+      <TouchableOpacity
+        style={{
+          marginVertical: 10,
+          padding: 8,
+          backgroundColor: 'red',
+          width: '80%',
+          borderRadius: 20,
+          alignItems: 'center',
+        }}
+        onPress={() => handleLogout()}>
+        <Text style={{color: '#fff'}}>Logout</Text>
+      </TouchableOpacity>
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-  },
-  inputBoxContainer: {
-    // backgroundColor: 'red',
-    alignItems: 'center',
-    flexDirection: 'row',
-    borderWidth: 1,
-    width: '90%',
-    marginTop: 10,
-    borderRadius: 20,
-    paddingHorizontal: 10,
-  },
-  inputBox: {
-    marginHorizontal: 10,
-    flex: 1,
-  },
-});

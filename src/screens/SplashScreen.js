@@ -1,10 +1,26 @@
 import {View, Text, StyleSheet, Image, StatusBar} from 'react-native';
-import React from 'react';
+import React, {useEffect} from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {useNavigation, StackActions} from '@react-navigation/native';
 
 //
 import Logo from '../../assets/img/logo.png';
 
 export default function SplashScreen() {
+  //
+  const navigation = useNavigation();
+
+  useEffect(() => {
+    setTimeout(async () => {
+      const isUserLogin = await AsyncStorage.getItem('isUserLogin');
+
+      if (isUserLogin) {
+        navigation.dispatch(StackActions.replace('Home'));
+      } else {
+        navigation.dispatch(StackActions.replace('Login'));
+      }
+    }, 4000);
+  }, []);
   return (
     <View style={styles.container}>
       <StatusBar hidden={true} />

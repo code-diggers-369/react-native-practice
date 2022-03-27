@@ -8,9 +8,10 @@ import {
   TextInput,
   TouchableOpacity,
 } from 'react-native';
-import {useNavigation} from '@react-navigation/native';
+import {useNavigation, StackActions} from '@react-navigation/native';
 import FontAwsome from 'react-native-vector-icons/FontAwesome5';
 import Axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 //
 import BackgroundImg from '../../assets/img/bg-transferent.png';
@@ -24,13 +25,23 @@ export default function Login() {
 
   const loginUser = async () => {
     try {
-      const {data} = await Axios.post('http://192.168.0.102/api/login.php', {
+      const {data} = await Axios.post('http://192.168.0.101/api/login.php', {
         email: email,
         password: password,
       });
 
+      console.log(data);
+
+      const userData = {
+        email: data.data.email,
+        uid: data.data.id,
+      };
+
       if (data.status == 'success') {
-        alert('User Login Successfully');
+        await AsyncStorage.setItem('user_data', JSON.stringify(userData));
+        await AsyncStorage.setItem('isUserLogin', 'true');
+
+        navigation.dispatch(StackActions.replace('Home'));
       } else {
         alert('User Not Found');
       }
@@ -54,7 +65,8 @@ export default function Login() {
       <View style={styles.bottomBackgroundImgContainer}></View>
       <View style={styles.formContainer}>
         <View style={styles.formTopContainer}>
-          <FontAwsome name="angle-left" size={30} color="#fff" />
+          {/* <FontAwsome name="angle-left" size={30} color="#fff" /> */}
+          <View></View>
 
           <Text style={{color: '#fff', fontSize: 30, fontWeight: 'bold'}}>
             Hi!
