@@ -25,28 +25,19 @@ export default function Login() {
 
   const loginUser = async () => {
     try {
-      const {data} = await Axios.post('http://192.168.0.101/api/login.php', {
-        email: email,
-        password: password,
-      });
+      if (email == 'haresh@gmail.com' && password == '123') {
+        const userData = {
+          email: email,
+          uid: 1,
+        };
 
-      console.log(data);
-
-      const userData = {
-        email: data.data.email,
-        uid: data.data.id,
-      };
-
-      if (data.status == 'success') {
         await AsyncStorage.setItem('user_data', JSON.stringify(userData));
         await AsyncStorage.setItem('isUserLogin', 'true');
 
         navigation.dispatch(StackActions.replace('Home'));
       } else {
-        alert('User Not Found');
+        alert('Please Check Your Data');
       }
-
-      console.log(data);
     } catch (err) {
       console.log(err);
     }

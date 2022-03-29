@@ -1,4 +1,4 @@
-import {View, Text, TouchableOpacity} from 'react-native';
+import {View, Text, TouchableOpacity, Alert} from 'react-native';
 import React from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useNavigation, StackActions} from '@react-navigation/native';
@@ -9,10 +9,20 @@ export default function Home() {
   //
   const handleLogout = async () => {
     try {
-      console.log('logout');
-      await AsyncStorage.clear();
+      Alert.alert('Warning', 'Are You Sure To Logout ?', [
+        {
+          text: 'Yes',
+          onPress: async () => {
+            console.log('logout');
+            await AsyncStorage.clear();
 
-      navigation.dispatch(StackActions.replace('Login'));
+            navigation.dispatch(StackActions.replace('Login'));
+          },
+        },
+        {
+          text: 'No',
+        },
+      ]);
     } catch (err) {
       console.log(err);
     }

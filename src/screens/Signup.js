@@ -23,18 +23,9 @@ export default function Signup() {
 
   const signupUser = async () => {
     try {
-      const {data} = await Axios.post('http://192.168.0.102/api/signup.php', {
-        email: email,
-        password: password,
-      });
-
-      if (data.status == 'success') {
+      if (email.length > 0 && password.length > 0) {
         alert('User Created Successfully');
-      } else {
-        alert('User Not Created');
       }
-
-      console.log(data);
     } catch (err) {
       console.log(err);
     }
