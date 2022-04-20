@@ -1,56 +1,49 @@
-import React, {useState, useEffect} from 'react';
-import {View, Text, ScrollView, RefreshControl} from 'react-native';
-import Axios from 'axios';
+import {View, Text, TouchableOpacity, Image} from 'react-native';
+import React, {useState} from 'react';
+import FilePicker, {types} from 'react-native-document-picker';
 
 export default function Home() {
-  const [isRefreshing, setIsRefreshing] = useState(false);
-  const [dataList, setDataList] = useState([]);
-  const [pageNo, setPageNo] = useState(1);
-
-  useEffect(() => {
-    fetchApiData();
-    return () => {};
-  }, []);
-
-  const fetchApiData = async () => {
+  const [fileData, setFileData] = useState([]);
+  //
+  const handleFilePicker = async () => {
     try {
-      const response = await Axios.get(
-        `https://jsonplaceholder.typicode.com/users/${pageNo}/todos`,
-      );
+      const response = await FilePicker.pick({
+        presentationStyle: 'fullScreen',
+        allowMultiSelection: true,
+        type: [types.images],
+      });
 
-      // console.log(response.data);
-      setDataList(response.data);
+      setFileData(response);
+      console.log(response);
     } catch (err) {
       console.log(err);
     }
   };
 
-  const handleRefresh = async () => {
-    setIsRefreshing(true);
-    setPageNo(pageNo + 1);
-    await fetchApiData();
-
-    setIsRefreshing(false);
-  };
-
   return (
     <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-      <ScrollView
-        style={{height: '100%', width: '100%'}}
-        refreshControl={
-          <RefreshControl
-            refreshing={isRefreshing}
-            onRefresh={() => handleRefresh()}
-          />
-        }>
-        {dataList.map((ls, i) => {
-          return (
-            <Text key={i} style={{marginHorizontal: 7, marginVertical: 10}}>
-              Id = {ls.id} Title = {ls.title}
-            </Text>
-          );
-        })}
-      </ScrollView>
+      {fileData.length > 0
+        ? fileData.map((ls, index) => {
+            return (
+              <View key={index}>
+                <Image
+                  source={{uri: ls.uri}}
+                  style={{height: 300, width: 300}}
+                />
+              </View>
+            );
+          })
+        : null}
+
+      <TouchableOpacity
+        onPress={() => handleFilePicker()}
+        style={{
+          backgroundColor: 'blue',
+          paddingHorizontal: 20,
+          paddingVertical: 15,
+        }}>
+        <Text style={{color: '#fff'}}>Open </Text>
+      </TouchableOpacity>
     </View>
   );
 }
