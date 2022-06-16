@@ -1,66 +1,109 @@
-import React from 'react';
-import {
-  Dimensions,
-  StyleSheet,
-  Text,
-  View,
-  TouchableOpacity,
-} from 'react-native';
-import ScrollBottomSheet from 'react-native-scroll-bottom-sheet';
+import {View, Text, Dimensions, Button} from 'react-native';
+import React, {useState, useRef} from 'react';
+import ReanimatedBottomsheet from 'react-native-reanimated-bottomsheet';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
-const windowHeight = Dimensions.get('window').height;
+const {height, width} = Dimensions.get('screen');
+
+//
+import {createDrawerNavigator} from '@react-navigation/drawer';
+const Drawer = createDrawerNavigator();
 
 export default function Home() {
+  const [itemList, setItemList] = useState([
+    {
+      title: 'Home',
+      icon: () => <Ionicons name="home-outline" />,
+    },
+    {
+      title: 'Profile',
+      icon: () => <Ionicons name="person-outline" />,
+    },
+    {
+      title: 'Settings',
+      icon: () => <Ionicons name="settings-outline" />,
+    },
+    {
+      title: 'Profile',
+      icon: () => <Ionicons name="person-outline" />,
+    },
+    {
+      title: 'Settings',
+      icon: () => <Ionicons name="settings-outline" />,
+    },
+  ]);
+
+  const bottomSheetRef = useRef(null);
+
   return (
-    <View style={styles.container}>
-      <ScrollBottomSheet
-        componentType="FlatList"
-        snapPoints={[128, '50%', windowHeight - 200]}
-        initialSnapIndex={2}
-        renderHandle={() => (
-          <View style={styles.header}>
-            <View style={styles.panelHandle} />
-          </View>
-        )}
-        data={[1, 2, 3, 4, 5]}
-        keyExtractor={i => i}
-        renderItem={({item}) => (
-          <TouchableOpacity style={styles.item}>
-            <Text>{`${item}`}</Text>
-          </TouchableOpacity>
-        )}
-        contentContainerStyle={styles.contentContainerStyle}
+    <Drawer.Navigator>
+      <Drawer.Screen
+        name="Feed"
+        component={() => {
+          return (
+            <View style={{flex: 1}}>
+              <ReanimatedBottomsheet
+                ref={bottomSheetRef}
+                snapPoints={[0, 200, 400, 450]}
+                renderHeader={() => {
+                  return (
+                    <View
+                      style={{
+                        alignItems: 'center',
+                        backgroundColor: 'grey',
+                        paddingVertical: 10,
+                        borderTopLeftRadius: 20,
+                        borderTopRightRadius: 20,
+                      }}>
+                      <View
+                        style={{
+                          height: 5,
+                          width: 50,
+                          backgroundColor: 'white',
+                        }}></View>
+                    </View>
+                  );
+                }}
+                renderContent={() => {
+                  return itemList.map((ls, index) => {
+                    return (
+                      <View style={{backgroundColor: 'white'}} key={index}>
+                        <Text>{ls.title}</Text>
+                      </View>
+                    );
+                  });
+                }}
+                enabledGestureInteraction={true}
+              />
+              <View>
+                <Button
+                  title="Open Bottom Sheet"
+                  onPress={() => {
+                    bottomSheetRef.current.snapTo(2);
+                  }}
+                />
+                <View style={{marginVertical: 20}}></View>
+                <Button
+                  title="Close Bottom Sheet"
+                  onPress={() => {
+                    bottomSheetRef.current.close();
+                  }}
+                />
+              </View>
+            </View>
+          );
+        }}
       />
-    </View>
+      <Drawer.Screen
+        name="Article"
+        component={() => {
+          return (
+            <View>
+              <Text>Article</Text>
+            </View>
+          );
+        }}
+      />
+    </Drawer.Navigator>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  contentContainerStyle: {
-    padding: 16,
-    backgroundColor: '#F3F4F9',
-  },
-  header: {
-    alignItems: 'center',
-    backgroundColor: 'white',
-    paddingVertical: 20,
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
-  },
-  panelHandle: {
-    width: 40,
-    height: 2,
-    backgroundColor: 'rgba(0,0,0,0.3)',
-    borderRadius: 4,
-  },
-  item: {
-    padding: 20,
-    justifyContent: 'center',
-    backgroundColor: 'white',
-    alignItems: 'center',
-    marginVertical: 10,
-  },
-});
