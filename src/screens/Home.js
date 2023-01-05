@@ -1,32 +1,28 @@
-import {View, Text, Button, TextInput} from 'react-native';
+import {View, Text, Button} from 'react-native';
 import React, {useState} from 'react';
-import Qrcode from 'react-native-qrcode-svg';
+import {useNavigation} from '@react-navigation/native';
 
 export default function Home() {
-  const [qrCodeText, setQrCodeText] = useState('');
+  const navigation = useNavigation();
   return (
-    <View style={{flex: 1, backgroundColor: 'black'}}>
-      <View style={{alignItems: 'center', marginTop: 10}}>
-        <TextInput
-          placeholder="Enter Your Data"
-          style={{borderWidth: 1, borderColor: 'white', width: '80%'}}
-          onChangeText={text => setQrCodeText(text)}
-          value={qrCodeText}
-        />
-      </View>
-
-      <View
-        style={{
-          flex: 1,
-          justifyContent: 'center',
-          alignItems: 'center',
-        }}>
-        <Qrcode
-          value={qrCodeText ? qrCodeText : 'https://www.google.com/'}
-          size={300}
-          logo={require('../../assets/img/logo.png')}
-        />
-      </View>
+    <View
+      style={{
+        flex: 1,
+        backgroundColor: 'black',
+        justifyContent: 'space-around',
+      }}>
+      <Button
+        onPress={() => {
+          navigation.navigate('ScannerScreen');
+        }}
+        title="Scan Qrcode"
+      />
+      <Button
+        onPress={() => {
+          navigation.navigate('GeneratorScreen');
+        }}
+        title="Genrate Qrcode"
+      />
     </View>
   );
 }
