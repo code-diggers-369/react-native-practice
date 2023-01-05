@@ -1,30 +1,32 @@
-import {View, Text, Button, Vibration} from 'react-native';
+import {View, Text, Button, TextInput} from 'react-native';
 import React, {useState} from 'react';
+import Qrcode from 'react-native-qrcode-svg';
 
 export default function Home() {
-  const [vibrationId, setVibrationId] = useState(null);
-
+  const [qrCodeText, setQrCodeText] = useState('');
   return (
     <View style={{flex: 1, backgroundColor: 'black'}}>
-      <Text>Home</Text>
+      <View style={{alignItems: 'center', marginTop: 10}}>
+        <TextInput
+          placeholder="Enter Your Data"
+          style={{borderWidth: 1, borderColor: 'white', width: '80%'}}
+          onChangeText={text => setQrCodeText(text)}
+          value={qrCodeText}
+        />
+      </View>
 
-      <Button
-        title="click here for vibration"
-        onPress={() => {
-          const id = setInterval(() => {
-            Vibration.vibrate(1000, true);
-          }, 3000);
-          setVibrationId(id);
-        }}
-      />
-
-      <Button
-        title="click here for stop vibration"
-        onPress={() => {
-          Vibration.cancel();
-          clearInterval(vibrationId);
-        }}
-      />
+      <View
+        style={{
+          flex: 1,
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}>
+        <Qrcode
+          value={qrCodeText ? qrCodeText : 'https://www.google.com/'}
+          size={300}
+          logo={require('../../assets/img/logo.png')}
+        />
+      </View>
     </View>
   );
 }
