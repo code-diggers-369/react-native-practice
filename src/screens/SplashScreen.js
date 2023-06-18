@@ -1,9 +1,9 @@
-import {View, Text, StyleSheet, Image, StatusBar} from 'react-native';
-import React, {useEffect} from 'react';
-import {useNavigation, StackActions} from '@react-navigation/native';
+import { View, Text, StyleSheet, Image, StatusBar } from 'react-native';
+import React, { useEffect } from 'react';
+import { useNavigation, StackActions } from '@react-navigation/native';
 
 //
-import Logo from '../../assets/img/logo.png';
+import Logo from '../assets/img/logo.png';
 
 export default function SplashScreen() {
   //

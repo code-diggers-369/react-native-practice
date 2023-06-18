@@ -1,5 +1,5 @@
-import {View, Text, Button} from 'react-native';
-import React, {useState} from 'react';
+import { View, Text, Button } from 'react-native';
+import React, { useState } from 'react';
 
 export default function Home() {
   return (
@@ -10,7 +10,7 @@ export default function Home() {
         justifyContent: 'center',
         alignItems: 'center',
       }}>
-      <Text style={{fontSize: 50}}>Hello World</Text>
+      <Text style={{ fontSize: 50, color: "white" }}>Hello World</Text>
     </View>
   );
 }
