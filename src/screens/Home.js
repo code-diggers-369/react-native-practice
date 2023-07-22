@@ -1,9 +1,15 @@
-import { View, Text, Button, Dimensions } from 'react-native';
-import React, { useState } from 'react';
-import ContentLoader, { Rect, Circle } from 'react-content-loader/native'
+import { View, Text, TextInput, Button, ToastAndroid } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import Clipboard, { useClipboard } from '@react-native-clipboard/clipboard';
 
 export default function Home() {
-  const { height, width } = Dimensions.get('screen')
+  const [inputText, setInputText] = useState("")
+  const [input2Text, setInput2Text] = useState("")
+
+  const [data, setData] = useClipboard();
+
+
+
   return (
     <View
       style={{
@@ -13,21 +19,33 @@ export default function Home() {
         backgroundColor: "white"
       }}
     >
-      <ContentLoader
-        speed={2}
-        width={400}
-        height={160}
-        viewBox="0 0 400 160"
-        backgroundColor="#d9d9d9"
-        foregroundColor="#ededed"
-      >
-        <Rect x="50" y="6" rx="4" ry="4" width="343" height="38" />
-        <Rect x="8" y="6" rx="4" ry="4" width="35" height="38" />
-        <Rect x="50" y="55" rx="4" ry="4" width="343" height="38" />
-        <Rect x="8" y="55" rx="4" ry="4" width="35" height="38" />
-        <Rect x="50" y="104" rx="4" ry="4" width="343" height="38" />
-        <Rect x="8" y="104" rx="4" ry="4" width="35" height="38" />
-      </ContentLoader>
+
+      <TextInput value={inputText} onChangeText={(text) => setInputText(text)} style={{ borderWidth: 1, width: "90%", marginBottom: 20 }} placeholder="Enter Your Text" />
+
+      <Button title='Copy To Clipboard' onPress={() => {
+
+        // Clipboard.setString(inputText)
+        setData(inputText)
+        ToastAndroid.show('Copy Done', ToastAndroid.SHORT)
+      }} />
+
+
+      <TextInput value={input2Text} onChangeText={(text) => setInput2Text(text)} style={{ borderWidth: 1, width: "90%", marginVertical: 20 }} placeholder="Enter Your Text" />
+
+      <Button title='Paste From Clipboard' onPress={async () => {
+        const value = await Clipboard.getString()
+        setInput2Text(value)
+
+        ToastAndroid.show('Paste Done', ToastAndroid.SHORT)
+      }} />
+
+      <Text style={{
+        marginVertical: 20, fontWeight: "bold", fontSize: 40
+      }} selectable={true}>Haresh</Text>
+
+
+      <TextInput value={data} style={{ borderWidth: 1, width: "90%", marginVertical: 20 }} placeholder="Cipboard" />
+
     </View>
   );
 }
